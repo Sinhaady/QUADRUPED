@@ -1,0 +1,30 @@
+#include <Servo.h>
+
+Servo myServo;
+
+void setup() {
+  myServo.attach(12);
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Move the servo to 180 degrees slowly
+  for (int angle = 0; angle <= 180; angle += 1) {
+    myServo.write(angle);
+    Serial.print("angle=");
+    Serial.println(angle);
+    delay(15);  // Adjust the delay for the desired speed
+  }
+
+  delay(1000); // Wait for a moment at 180 degrees
+
+  // Move the servo back to 0 degrees slowly
+  for (int angle = 180; angle >= 0; angle -= 1) {
+    myServo.write(angle);
+        Serial.print("angle=");
+    Serial.println(angle);
+    delay(15);  // Adjust the delay for the desired speed
+  }
+
+  delay(1000); // Wait for a moment at 0 degrees
+}
