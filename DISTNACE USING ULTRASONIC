@@ -1,0 +1,31 @@
+const int trigPin = 12;  // Arduino digital pin connected to the sensor's trigger pin
+const int echoPin = 13;  // Arduino digital pin connected to the sensor's echo pin
+
+void setup() {
+  Serial.begin(9600);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+}
+
+void loop() {
+  // Trigger pulse to start the measurement
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  // Measure the duration of the echo pulse
+  long duration = pulseIn(echoPin, HIGH);
+
+  // Calculate distance in centimeters
+  float distance_cm = duration * 0.034 / 2;
+
+  // Print the distance to the Serial Monitor
+  Serial.print("Distance: ");
+  Serial.print(distance_cm);
+  Serial.println(" cm");
+
+  // Wait for a moment before taking the next measurement
+  delay(500);
+}
