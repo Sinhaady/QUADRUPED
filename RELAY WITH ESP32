@@ -1,0 +1,40 @@
+//code to control realy with ESP-32 bluetooth,DATE-13 FEB 2024;
+#include <BluetoothSerial.h>
+
+
+char command;
+BluetoothSerial SerialBT;  // Bluetooth Serial object
+const int relayPin = 2;    // Digital pin for relay module
+
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+  Serial.begin(9600);
+   SerialBT.begin(115200);
+
+
+  // Initialize Bluetooth Serial
+  SerialBT.begin("ESP32_BT");  // You can change the device name as needed
+}
+// ledcSetup(0, 5000, 8);  // Channel 0 for Motor A, 5 kHz frequency, 8-bit resolution
+ // ledcAttachPin(relayPin, R1);
+void loop() {
+  while (SerialBT.available() == 0) {}
+  
+    command = SerialBT.read();
+    if (command == 'A') {
+      digitalWrite(relayPin, HIGH); // Turn ON the relay
+      Serial.println("Relay ON");
+       SerialBT.println("Relay ON");
+       //delay(100
+    }
+  
+  else {
+          digitalWrite(relayPin, LOW);
+             // Turn ON the relay
+      Serial.println("Relay OFF");
+       SerialBT.println("Relay OFF");
+       //delay(1000);
+  }
+  
+}
