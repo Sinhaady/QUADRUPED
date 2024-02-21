@@ -1,0 +1,103 @@
+#include "BluetoothSerial.h"
+#include <Servo.h>
+
+
+BluetoothSerial mySerial;
+
+Servo servoPan;
+Servo servoTilt;
+
+
+
+int pan=90,tilt=90;
+char val;
+String inp;
+int sd=10;
+
+void setup() {
+  Serial.begin(9600);
+  mySerial.begin(9600);
+    mySerial.begin("Quadropped");
+  servoPan.attach(22);
+  servoTilt.attach(23);
+  servoPan.write(pan);
+  servoTilt.write(tilt);
+}
+
+void loop() {
+  if(mySerial.available()) {
+    val=mySerial.read();
+    if(val=='*') {
+      Serial.println(inp);
+
+      if(inp=="P+") {
+        setPan(pan+1);
+      }
+      else if(inp=="P-") {
+        setPan(pan-1);
+      }
+      else if(inp=="T+") {
+        setTilt(tilt+1);
+      }
+      else if(inp=="T-") {
+        setTilt(tilt-1);
+      }
+      else if(inp[0]=='P') {
+        setPan(inp.substring(1).toInt());
+      }
+      else if(inp[0]=='T') {
+        setTilt(inp.substring(1).toInt());
+      }
+      inp="";
+    }
+    else {
+      inp+=val;
+    }
+  }
+
+}
+
+
+void setPan(int t) {
+  if(t<0) {
+    t=0;
+  }
+  else if(t>180) {
+    t=180;
+  }
+  if(t>pan) {
+    for(int i=pan+1;i<=t;i++) {
+      servoPan.write(i);
+      delay(sd);
+    }
+  }
+  else if(t<pan) {
+    for(int i=pan-1;i>=t;i--) {
+      servoPan.write(i);
+      delay(sd);
+    }
+  }
+  pan=t;
+}
+
+void setTilt(int t) {
+  if(t<0) {
+    t=0;
+  }
+  else if(t>180) {
+    t=180;
+  }
+  if(t>tilt) {
+    for(int i=tilt+1;i<=t;i++) {
+      servoTilt.write(i);
+      delay(sd);
+    }
+  }
+  else if(t<tilt) {
+    for(int i=tilt-1;i>=t;i--) {
+      servoTilt.write(i);
+      delay(sd);
+    }
+  }
+  tilt=t;
+}
